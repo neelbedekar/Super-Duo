@@ -45,6 +45,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     private boolean searched;
     public static Context context;
     private DataReceiver dataReceiver;
+    private String doneStr;
 
     @Override
     public void onPause() {
@@ -110,6 +111,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                     return;
                 }
                 searched = true;
+                doneStr = ean;
                 if(!networkAvailable()&&(ean.length()==13||ean.startsWith("978"))){
                     Toast.makeText(getActivity(),getString(R.string.no_internet),Toast.LENGTH_SHORT).show();
                     return;
@@ -155,7 +157,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             @Override
             public void onClick(View view) {
                 Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.EAN, ean.getText().toString());
+                bookIntent.putExtra(BookService.EAN, doneStr);
                 bookIntent.setAction(BookService.DELETE_BOOK);
                 getActivity().startService(bookIntent);
                 ean.setText("");
